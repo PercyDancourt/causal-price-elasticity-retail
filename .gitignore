@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+*.whl
+
+# Virtual environment
+venv/
+.venv/
+env/
+.env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data — raw scanner data from Dominick's is not redistributable
+# Download instructions are in the README (Kilts Center, U. of Chicago)
+data/raw/
+data/processed/
+data/simulated/
+
+# Notebook generator scripts (used during development, not needed for reproduction)
+create_nb*.py
+parse_notebooks.py
+notebook_audit.txt
+proyecto.txt
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment variables / secrets
+.env
+*.env
+
+# Pytest / coverage
+.pytest_cache/
+.coverage
+htmlcov/
