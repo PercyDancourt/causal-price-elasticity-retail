@@ -182,6 +182,6 @@ Each notebook is self-contained and includes markdown cells explaining every mod
 
 ## License
 
-MIT License — see [LICENSE](LICENSE) for details.
+MIT License .
 
 The Dominick's dataset is subject to the terms of use of the Kilts Center for Marketing, University of Chicago Booth School of Business.
