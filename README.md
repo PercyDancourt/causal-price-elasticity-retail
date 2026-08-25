@@ -24,8 +24,8 @@ We address this with a two-stage causal inference pipeline:
 | Naive OLS (Entire Network) | −0.34 | Biased — captures promotional sales spikes |
 | DML ATE (Average Shelf) | **−0.088** | Causal shelf elasticity (no promotions) |
 | CATE — High price zone | −0.117 | Most price-sensitive stores (higher income/substitution) |
-| CATE — Medium price zone | −0.093 | Average price-sensitive stores |
-| CATE — Low price zone | −0.076 | Lower price sensitivity stores |
+| CATE — Low price zone | −0.104 | Price-sensitive stores |
+| CATE — Medium price zone | −0.092 | Average price-sensitive stores |
 | CATE — CubFighter price zone | −0.060 | Competitor-focused discount format (lowest sensitivity) |
 
 Our estimates are deliberately lower in magnitude than the canonical literature (Hausman 1997: −0.9 to −2.5; Bijmolt et al. 2005: −2.62 mean), because we isolate **baseline shelf elasticity** — the demand response to a quiet price change with no advertising support — which is the strategically actionable number for everyday pricing decisions.
