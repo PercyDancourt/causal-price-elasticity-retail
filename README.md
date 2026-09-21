@@ -3,7 +3,6 @@
 
 [![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)
 [![econml](https://img.shields.io/badge/econml-0.16.0-green.svg)](https://github.com/microsoft/EconML)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
 
@@ -19,18 +18,20 @@ We address this with a two-stage causal inference pipeline:
 
 ### Key Results
 
-| Analysis / Price Zone | Elasticity | Interpretation |
-|---|---|---|
-| Naive OLS (Entire Network) | −0.34 | Biased — captures promotional sales spikes |
-| DML ATE (Average Shelf) | **−0.088** | Causal shelf elasticity (no promotions) |
-| CATE — High price zone | −0.117 | Most price-sensitive stores (higher income/substitution) |
-| CATE — Low price zone | −0.104 | Price-sensitive stores |
-| CATE — Medium price zone | −0.092 | Average price-sensitive stores |
-| CATE — CubFighter price zone | −0.060 | Competitor-focused discount format (lowest sensitivity) |
+| Analysis / Price Zone | Elasticity | 95% CI | Interpretation |
+|---|---|---|---|
+| Naive OLS (Entire Network) | −0.34 | [−0.359, −0.320] | Biased — captures promotional sales spikes |
+| DML ATE (Average Shelf) | **−0.088** | [−0.106, −0.071] | Causal shelf elasticity (no promotions) |
+| CATE — High price zone | −0.117 | [−0.133, −0.101] | Most price-sensitive stores (higher income/substitution) |
+| CATE — Low price zone | −0.104 | [−0.124, −0.085] | Price-sensitive stores |
+| CATE — Medium price zone | −0.092 | [−0.104, −0.079] | Average price-sensitive stores |
+| CATE — CubFighter price zone | −0.060 | [−0.084, −0.037] | Competitor-focused discount format (lowest sensitivity) |
+
+All intervals are 95% confidence intervals from `econml`'s `.ate_interval()` on 100,000 (DML) and 500,000 (Causal Forest) observations. The High and CubFighter intervals don't overlap (two-sample z-test: p = 8.7×10⁻⁵), confirming the zone heterogeneity is statistically significant and not just sampling noise; the other zone pairs overlap.
 
 Our estimates are deliberately lower in magnitude than the canonical literature (Hausman 1997: −0.9 to −2.5; Bijmolt et al. 2005: −2.62 mean), because we isolate **baseline shelf elasticity** — the demand response to a quiet price change with no advertising support — which is the strategically actionable number for everyday pricing decisions.
 
-Since the estimated price elasticity is highly inelastic ($\epsilon > -1.0$) across all price zones, demand is relatively insensitive to price changes. A pricing simulation using the exact power-law demand formula confirms that **any price increase will lead to an increase in overall revenue** (e.g., a differentiated price increase of 3–7% yielded a 4.51% revenue increase across the simulated network).
+Since the estimated price elasticity is highly inelastic ($\epsilon > -1.0$) across all price zones, demand is relatively insensitive to price changes. A pricing simulation using the exact power-law demand formula shows that, **for the price increases we simulated (3–7% by zone, holding competitor prices constant)**, revenue rises rather than falls (a differentiated increase across zones yielded a 4.51% revenue gain across the simulated network). This is a static, shelf-level effect — it does not account for competitor repricing, and the result should not be extrapolated to price increases outside the 3–7% range we tested.
 
 ---
 
@@ -88,8 +89,10 @@ This project uses the **Dominick's Finer Foods** weekly scanner dataset, publicl
 ## Methodology
 
 ### Sample Size Rationale
-* **Double Machine Learning (DML - Notebook 04):** We run the model on a representative subset of $N=100,000$ transactions. This provides substantial statistical power for estimating the overall ATE while keeping 5-fold cross-fitting and hyperparameter tuning runtimes fast.
-* **Causal Forest (CATE - Notebook 05):** We expand the sample to $N=500,000$ observations. Since CATE estimates are conditional on 4 pricing zones (CubFighter, Low, High, Medium), a larger sample ensures enough observations per zone to grow stable forest splitting trees without the risk of dummy variable collisions in $X$.
+Both subsets are drawn with `df.sample(n=..., random_state=42)` — uniform random sampling with a fixed seed, so results are reproducible run to run.
+
+* **Double Machine Learning (DML - Notebook 04):** We run the model on a representative random subset of $N=100,000$ transactions (out of ~4.7M). This provides substantial statistical power for estimating the overall ATE while keeping 5-fold cross-fitting and hyperparameter tuning runtimes fast.
+* **Causal Forest (CATE - Notebook 05):** We expand the random sample to $N=500,000$ observations. Since CATE estimates are conditional on 4 pricing zones (CubFighter, Low, High, Medium), a larger sample ensures enough observations per zone to grow stable forest splitting trees without the risk of dummy variable collisions in $X$.
 
 ### Causal Identification Strategy
 
@@ -124,8 +127,8 @@ where the nuisance functions $\hat{E}[Y|W]$ and $\hat{E}[T|W]$ are estimated wit
 ## Installation
 
 ```bash
-git clone https://github.com/your-username/Pricing_Elasticity.git
-cd Pricing_Elasticity
+git clone https://github.com/PercyDancourt/causal-price-elasticity-retail.git
+cd causal-price-elasticity-retail
 
 python3 -m venv venv
 source venv/bin/activate          # macOS / Linux
@@ -182,6 +185,6 @@ Each notebook is self-contained and includes markdown cells explaining every mod
 
 ## License
 
-MIT License .
+MIT License.
 
 The Dominick's dataset is subject to the terms of use of the Kilts Center for Marketing, University of Chicago Booth School of Business.
